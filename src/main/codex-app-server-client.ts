@@ -2,6 +2,7 @@ import { spawn, type ChildProcessWithoutNullStreams } from "node:child_process";
 import { EventEmitter } from "node:events";
 import { accessSync, constants, readdirSync, statSync } from "node:fs";
 import { delimiter, join } from "node:path";
+import { homedir } from "node:os";
 import { createInterface, type Interface } from "node:readline";
 
 export interface CodexNotification {
@@ -76,6 +77,21 @@ function executable(path: string): boolean {
   }
 }
 
+// Finder does not inherit a login shell's PATH. Keep the caller's environment
+// and append the standard CLI locations for shebangs such as /usr/bin/env node.
+export function codexChildEnvironment(
+  platform: NodeJS.Platform = process.platform,
+  environment: NodeJS.ProcessEnv = process.env
+): NodeJS.ProcessEnv {
+  if (platform !== "darwin") return { ...environment };
+  const home = environment.HOME || homedir();
+  const paths = (environment.PATH ?? "/usr/bin:/bin:/usr/sbin:/sbin").split(delimiter).filter(Boolean);
+  return {
+    ...environment,
+    PATH: [...new Set([...paths, join(home, ".local", "bin"), "/opt/homebrew/bin", "/usr/local/bin"])].join(delimiter)
+  };
+}
+
 export function resolveCodexLaunchSpec(
   platform: NodeJS.Platform = process.platform,
   environment: NodeJS.ProcessEnv = process.env,
@@ -98,12 +114,13 @@ export function resolveCodexLaunchSpec(
   }
   if (platform === "darwin") {
     const desktopCodex = [
+      "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
       "/Applications/ChatGPT.app/Contents/Resources/codex",
       "/Applications/Codex.app/Contents/Resources/codex"
     ].find(isExecutable);
     if (desktopCodex) return { command: desktopCodex, args: ["app-server"] };
   }
-  const pathCandidates = (environment.PATH ?? "")
+  const pathCandidates = (codexChildEnvironment(platform, environment).PATH ?? "")
     .split(delimiter)
     .filter(Boolean)
     .map((directory) => join(directory, "codex"));
@@ -118,6 +135,7 @@ export function spawnCodexAppServer(): ChildProcessWithoutNullStreams {
   const launch = resolveCodexLaunchSpec();
   return spawn(launch.command, launch.args, {
     stdio: ["pipe", "pipe", "pipe"],
+    env: codexChildEnvironment(),
     ...(launch.windowsHide ? { windowsHide: true } : {})
   });
 }
