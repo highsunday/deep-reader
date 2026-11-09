@@ -1,0 +1,296 @@
+/* Notes is the visual reference for the library's companion pages. */
+:root {
+  --library-ink: #33403a;
+  --library-muted: #716b61;
+  --library-background: #f5f1e9;
+  --library-surface: #fffdf8;
+  --library-border: #d0cabc;
+  --library-radius: 15px;
+  --library-shadow: 0 8px 24px rgb(65 73 59 / 5%);
+  --library-heading-background: linear-gradient(90deg, #ebf4f8, #faf7ef 60%);
+}
+
+/* Repeating the class gives the shared heading precedence over page-specific rules. */
+.library-page-heading.library-page-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 20px;
+  color: var(--library-ink);
+}
+.library-page-heading.library-page-heading > div { min-width: 0; }
+.library-page-heading.library-page-heading h1 {
+  margin: 4px 0 8px;
+  color: var(--library-ink);
+  font: 700 32px/1.1 Georgia, serif;
+  letter-spacing: normal;
+  overflow-wrap: anywhere;
+}
+.library-page-heading.library-page-heading p {
+  margin: 0;
+  color: var(--library-muted);
+  font-size: 14px;
+  line-height: 1.65;
+}
+.library-page-eyebrow {
+  display: block;
+  margin: 0;
+  color: #6d7780;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.5;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.practice-workspace.practice-workspace,
+.wb-library.wb-library,
+.spaced-review-workspace:not(.is-reviewing),
+.reader-panel.concept-videos-view > .reader-scroll {
+  color: var(--library-ink);
+  background: var(--library-heading-background) top / 100% 240px no-repeat, var(--library-background);
+}
+.practice-inner.practice-inner {
+  max-width: 1120px;
+  padding: 34px 24px 32px;
+}
+.spaced-review-workspace:not(.is-reviewing) { padding: 34px 24px 32px; gap: 0; }
+.spaced-review-workspace:not(.is-reviewing) .spaced-review-header,
+.spaced-review-workspace:not(.is-reviewing) .review-dashboard { max-width: 1072px; }
+.reader-panel.concept-videos-view { grid-template-rows: minmax(0, 1fr); }
+.reader-panel.concept-videos-view > .reader-scroll { padding: 0; }
+.concept-video-library.concept-video-library { max-width: 1120px; padding: 34px 24px 32px; }
+.wb-library.wb-library { padding: 34px max(24px, calc((100% - 1072px) / 2)) 32px; }
+
+.library-page-heading h1 > span,
+.wb-library-header .wb-board-count,
+.concept-video-library-heading .concept-video-count {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 5px 10px;
+  border: 1px solid var(--library-border);
+  border-radius: 999px;
+  background: var(--library-surface);
+  color: #667068;
+  font: 500 12px/1.5 Inter, ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: normal;
+}
+.practice-heading h1 { gap: 12px; }
+
+/* Filter and progress surfaces use the same paper, border and corner treatment. */
+.wb-library-controls.wb-library-controls,
+.concept-video-library .concept-video-filters,
+.review-dashboard .review-daily {
+  padding: 12px;
+  border: 1px solid var(--library-border);
+  border-radius: var(--library-radius);
+  background: rgb(255 254 250 / 92%);
+  box-shadow: var(--library-shadow);
+}
+.concept-video-library .concept-video-filters { margin: 0 0 20px; }
+.concept-video-library .concept-video-filters label { color: #667068; font-size: 11px; font-weight: 750; }
+.wb-library-controls input,
+.concept-video-library .concept-video-filters :is(input, select) {
+  height: 42px;
+  border: 1px solid #cbc6ba;
+  border-radius: 10px;
+  background: #fff;
+  color: #2f3731;
+  font-size: 14px;
+  font-weight: 500;
+}
+.whiteboard-workspace .wb-library .wb-primary,
+.practice-workspace .practice-primary {
+  min-height: 42px;
+  border: 1px solid var(--primary);
+  border-radius: 10px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 650;
+}
+.wb-library .wb-board-tile,
+.concept-video-library .concept-video-card,
+.practice-workspace .practice-focus,
+.practice-workspace .practice-filmstrip > button,
+.review-dashboard :is(.review-growth, .review-activity, .review-home-card) {
+  border-color: var(--library-border);
+  border-radius: var(--library-radius);
+  background: var(--library-surface);
+  box-shadow: var(--library-shadow);
+}
+.practice-workspace .practice-focus-picture,
+.practice-workspace .practice-thumb { background: #edf3f4; }
+.practice-workspace .practice-focus-copy > p { color: var(--library-muted); }
+.practice-workspace .practice-focus-copy h2 { color: var(--library-ink); font-family: Georgia, serif; letter-spacing: normal; }
+.practice-workspace .practice-filmstrip > button[aria-pressed="true"] { border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
+.practice-workspace .practice-empty {
+  padding: 56px 24px;
+  border: 1px dashed var(--library-border);
+  border-radius: var(--library-radius);
+  background: var(--library-surface);
+  color: var(--library-muted);
+}
+.practice-workspace .practice-empty h2 { color: var(--library-ink); font-family: Georgia, serif; }
+
+/* Keep recall as the primary action without a competing dark hero surface. */
+.review-dashboard .review-home-card.has-ready-cards {
+  border: 1px solid var(--library-border);
+  background: var(--library-surface);
+  box-shadow: var(--library-shadow);
+}
+.review-dashboard .has-ready-cards .review-focus-symbol { border-color: #d4e2e8; color: var(--primary); background: #eaf2f5; }
+.review-dashboard .review-focus-status { color: #607f91; }
+.review-dashboard .review-focus-status i { background: #6f98ad; box-shadow: 0 0 0 4px rgb(111 152 173 / 12%); }
+.review-dashboard .has-ready-cards h2 { color: var(--library-ink); }
+.review-dashboard .has-ready-cards p { color: var(--library-muted); }
+.spaced-review-workspace .has-ready-cards .review-primary {
+  border: 1px solid var(--primary);
+  border-radius: 10px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 650;
+  box-shadow: none;
+}
+.spaced-review-workspace .has-ready-cards .review-primary:hover:not(:disabled) { background: var(--primary-hover); color: #fff; }
+.spaced-review-workspace .has-ready-cards .review-quiet { color: #607f91; }
+.spaced-review-workspace .has-ready-cards .review-quiet:hover:not(:disabled) { color: var(--primary); background: #edf3f5; }
+.review-dashboard .review-daily-heading h2 { color: var(--library-ink); }
+.review-dashboard .review-growth > header h2 { color: var(--library-ink); }
+.review-dashboard p { color: var(--library-muted); }
+
+@media (max-width: 760px) {
+  .library-page-heading.library-page-heading { flex-wrap: wrap; gap: 12px; }
+  .library-page-heading.library-page-heading h1 { font-size: 27px; }
+  .practice-inner.practice-inner,
+  .concept-video-library.concept-video-library,
+  .wb-library.wb-library,
+  .spaced-review-workspace:not(.is-reviewing) { padding: 26px 18px 24px; }
+}
+@container (max-width: 600px) {
+  .library-page-heading.library-page-heading { flex-wrap: wrap; gap: 12px; }
+  .library-page-heading.library-page-heading h1 { font-size: 27px; }
+}
+
+@container (max-width: 600px) {
+  .concept-video-library .concept-video-filters { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Video cards follow the note cards: compact tools, inset visual, quiet footer. */
+.concept-video-library .concept-video-grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
+  gap: 20px;
+}
+.concept-video-library .concept-video-card {
+  align-items: stretch;
+  gap: 11px;
+  padding: 12px;
+  border: 1px solid #d9d5ca;
+  border-radius: 20px;
+  color: #304037;
+  background: rgb(255 254 250 / 92%);
+  box-shadow: 0 8px 24px rgb(67 57 40 / 7%), inset 0 1px 0 rgb(255 255 255 / 90%);
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+.concept-video-library .concept-video-card:hover,
+.concept-video-library .concept-video-card:focus-within {
+  border-color: #9eb2a4;
+  box-shadow: 0 16px 34px rgb(55 78 59 / 13%);
+}
+.concept-video-card-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 29px;
+  padding: 0 3px 9px;
+  border-bottom: 1px solid rgb(211 216 207 / 72%);
+}
+.concept-video-card-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-right: auto;
+  color: #68766d;
+  font-size: 10px;
+  font-weight: 750;
+  line-height: 1.4;
+}
+.concept-video-card-status i { width: 6px; height: 6px; flex-shrink: 0; border-radius: 50%; background: #65a278; box-shadow: 0 0 0 2px rgb(101 162 120 / 12%); }
+.concept-video-card-status[data-state="draft"] i { border: 1px solid #98a39b; background: transparent; box-shadow: none; }
+.concept-video-card-status[data-state="generating"] i { background: #6f98ad; box-shadow: 0 0 0 2px rgb(111 152 173 / 12%); }
+.concept-video-library .concept-video-card-tool {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 26px;
+  min-height: 22px;
+  padding: 0;
+  border: 1px solid rgb(121 139 127 / 25%);
+  border-radius: 7px;
+  color: #557063;
+  background: #f8faf6;
+  box-shadow: 0 1px 4px rgb(42 61 48 / 7%);
+}
+.concept-video-card-tool svg,
+.concept-video-card-source svg { width: 15px; height: 15px; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 1.55; stroke-linecap: round; stroke-linejoin: round; }
+.concept-video-library .concept-video-card-delete:hover:not(:disabled) { color: #8a493b; background: #f8eeea; }
+.concept-video-library .concept-video-cover,
+.concept-video-library button.concept-video-cover {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin: 0;
+  border: 1px solid #d9ddd5;
+  border-radius: 14px;
+  background: #edf1eb;
+  color: #68766d;
+}
+.concept-video-library button.concept-video-cover:hover { background: #edf1eb; filter: none; }
+.concept-video-library .concept-video-cover img { object-fit: contain; }
+.concept-video-library .concept-video-cover-play { width: 30px; height: 30px; color: #4f745a; background: #fffefae8; box-shadow: 0 2px 8px rgb(42 61 48 / 15%); }
+.concept-video-library .concept-video-card h2 {
+  min-height: 2.6em;
+  margin: 1px 3px 0;
+  display: -webkit-box;
+  overflow: hidden;
+  color: #2d3c33;
+  font: 700 20px/1.3 Georgia, "Times New Roman", serif;
+  letter-spacing: -.012em;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.concept-video-card-source { display: flex; align-items: center; gap: 7px; min-width: 0; margin-inline: 3px; color: #68756c; font-size: 11px; font-weight: 720; line-height: 1.4; }
+.concept-video-card-source > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.concept-video-card-details { margin-inline: 3px; color: #788079; font-size: 11px; }
+.concept-video-card-details summary { width: fit-content; cursor: pointer; }
+.concept-video-card-details[open] { display: grid; gap: 6px; }
+.concept-video-library .concept-video-card-details p { display: block; overflow: visible; font-size: 12px; line-height: 1.6; }
+.concept-video-library .concept-video-card-details .concept-video-card-error { color: #9b4939; overflow-wrap: anywhere; }
+.concept-video-library .video-card-job { margin-inline: 3px; color: #788079; font-size: 11px; }
+.concept-video-library .concept-video-card-actions {
+  min-height: 38px;
+  margin-top: auto;
+  padding: 10px 0 0;
+  border-top: 1px solid rgb(211 211 201 / 72%);
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.concept-video-card-actions time { color: #858b86; font-size: 10.5px; font-variant-numeric: tabular-nums; }
+.concept-video-library .concept-video-card-actions .concept-video-card-open {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 28px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 999px;
+  color: #4f745a;
+  background: rgb(96 127 106 / 8%);
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.concept-video-library .concept-video-card-actions .concept-video-card-open:hover { color: #355e42; background: rgb(96 127 106 / 14%); }
+@media (prefers-reduced-motion: reduce) { .concept-video-library .concept-video-card { transition: none; } }

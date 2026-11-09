@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" fill="none">
+  <title>Deep Reading — Knowledge</title>
+  <desc>A symmetrical white open book with three rays of understanding on a soft blue rounded tile.</desc>
+  <defs>
+    <linearGradient id="blue" x1="512" y1="64" x2="512" y2="960" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#548EBB"/>
+      <stop offset="1" stop-color="#2D5B85"/>
+    </linearGradient>
+    <filter id="shadow" x="0" y="0" width="1024" height="1024" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="16" stdDeviation="16" flood-color="#183B5B" flood-opacity=".18"/>
+    </filter>
+    <path id="page-lines" d="M304 452C349 449 393 459 434 479M304 525C349 522 393 532 434 552M304 598C349 595 393 605 434 625"/>
+  </defs>
+  <g filter="url(#shadow)">
+    <rect x="64" y="64" width="896" height="896" rx="204" fill="url(#blue)"/>
+    <rect x="66" y="66" width="892" height="892" rx="202" stroke="#FFFFFF" stroke-opacity=".18" stroke-width="4"/>
+  </g>
+  <g stroke="#F7FAFD" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M512 220V267M391 249L413 283M633 249L611 283" stroke-width="22"/>
+    <path d="M226 361C323 328 421 344 512 393C603 344 701 328 798 361V711C701 685 603 700 512 752C421 700 323 685 226 711V361Z" fill="#FFFFFF" fill-opacity=".06" stroke-width="28"/>
+    <path d="M512 397V746" stroke-width="24"/>
+    <g stroke-width="19" opacity=".82">
+      <use href="#page-lines"/>
+      <use href="#page-lines" transform="translate(1024 0) scale(-1 1)"/>
+    </g>
+  </g>
+</svg>

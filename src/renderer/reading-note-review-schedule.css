@@ -1,0 +1,42 @@
+.note-review-schedule { margin-top: 24px; padding: 10px 12px; border: 1px solid #ded5c3; border-radius: 10px; background: #f9f5eb; color: #293329; container: note-review-schedule / inline-size; font-size: 12px; line-height: 1.3; }
+/* Use the canvas width for schedule metadata, preserving the narrower note text. */
+.reading-note-canvas-scroll { container: note-canvas-scroll / inline-size; }
+.reading-note-canvas-paper > .note-review-schedule { position: relative; left: 50%; width: min(1040px, calc(100cqw - 40px)); transform: translateX(-50%); }
+.note-review-schedule-summary { display: flex; align-items: stretch; gap: 10px; }
+.note-review-schedule-heading { flex: 0 0 auto; min-width: 124px; }
+.note-review-schedule-heading h3 { margin: 0; color: #293329; font-size: 15px; line-height: 1.2; white-space: nowrap; font-weight: 750; letter-spacing: -.025em; }
+.note-review-schedule-state { color: #47715b; font-size: 11px; font-weight: 650; }
+.note-review-schedule-state[data-state="paused"] { color: #947540; }
+.note-review-schedule-state[data-state="unavailable"], .note-review-schedule-state[data-state="off"], .note-review-schedule-state[data-state="loading"] { color: #827a6f; }
+.note-review-schedule-state[data-state="error"] { color: #9d604e; }
+.note-review-schedule-summary dl { flex: 1; min-width: 0; margin: 0; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) minmax(0, 1.25fr) minmax(0, .75fr); }
+.note-review-schedule-summary dl > div { min-width: 0; padding-inline: 12px; border-left: 1px solid #dfd8ca; }
+.note-review-schedule-summary dl > div:last-child { padding-right: 0; }
+.note-review-schedule-summary dt { color: #827a6f; font-size: 11px; font-weight: 400; letter-spacing: .015em; }
+.note-review-schedule-summary dd { margin: 2px 0 0; color: #293329; font-size: 13px; line-height: 1.25; font-weight: 700; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.note-review-schedule-hint, .note-review-schedule > p { color: #827a6f; font-size: 13px; }
+.note-review-history { margin-top: 10px; padding-top: 8px; border-top: 1px solid #ded5c3; }
+.note-review-history summary { width: fit-content; color: #293329; font-size: 13px; line-height: 1.3; font-weight: 700; cursor: pointer; }
+.note-review-history summary::marker { font-size: .85em; }
+.note-review-history summary:focus-visible, .note-review-history-scroll:focus-visible { outline: 2px solid #73947c; outline-offset: 4px; border-radius: 3px; }
+.note-review-history > p { margin-bottom: 0; color: #827a6f; font-size: 13px; }
+.note-review-history-scroll { max-height: 260px; margin-top: 10px; overflow: auto; scrollbar-width: thin; scrollbar-color: #c3cabc transparent; }
+.note-review-history table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: left; }
+.note-review-history caption { text-align: left; padding-bottom: 8px; color: #827a6f; font-size: 12px; }
+.note-review-history th { font-weight: 500; color: #827a6f; }
+.note-review-history th, .note-review-history td { padding: 7px 10px; border-bottom: 1px solid #e3ddcf; vertical-align: top; }
+.note-review-history tr:last-child td { border-bottom: 0; }
+.note-review-history td { font-variant-numeric: tabular-nums; }
+.note-review-rating { color: inherit; white-space: nowrap; }
+.note-review-schedule-error { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 12px; color: #9d604e; }
+.note-review-schedule-error button { padding: 5px 8px; border: 1px solid #ded5c3; border-radius: 6px; background: #fffefa; color: #405b48; cursor: pointer; font: inherit; font-size: 13px; }
+@container note-review-schedule (max-width: 600px) {
+  .note-review-schedule-summary { flex-direction: column; gap: 10px; }
+  .note-review-schedule-heading { flex-basis: auto; }
+  .note-review-schedule-summary dl { width: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 0; }
+  .note-review-schedule-summary dl > div { padding-inline: 12px; }
+  .note-review-schedule-summary dl > div:nth-child(odd) { padding-left: 0; border-left: 0; }
+}
+@container note-review-schedule (max-width: 360px) {
+  .note-review-history table { min-width: 460px; }
+}

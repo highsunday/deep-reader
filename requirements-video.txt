@@ -1,0 +1,2 @@
+# Manim Community; do not install ManimGL into this environment.
+manim[typst]==0.21.0

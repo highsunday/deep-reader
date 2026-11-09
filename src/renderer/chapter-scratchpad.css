@@ -1,0 +1,45 @@
+.chapter-scratchpad-layer { position: absolute; z-index: 35; inset: calc(var(--subheader-height) + 12px) 12px 12px; pointer-events: none; }
+.chapter-scratchpad-layer[hidden], .chapter-scratchpad [hidden], .chapter-scratchpad-layer > [hidden] { display: none !important; }
+.chapter-scratchpad-launch { position: absolute; left: 4px; bottom: 4px; pointer-events: auto; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 1px solid #dfd6c0; border-radius: 50%; background: #fffaf0; color: #596b5c; box-shadow: 0 2px 8px #303a3414; cursor: pointer; }
+.chapter-scratchpad-launch:hover { background: #f7efd9; border-color: #c4b795; color: #354f40; box-shadow: 0 3px 12px #303a3421; }
+.chapter-scratchpad-launch:active { background: #eee4c9; box-shadow: 0 1px 3px #303a3414; }
+.chapter-scratchpad-launch .chapter-scratchpad-dot { position: absolute; top: 6px; right: 6px; width: 6px; height: 6px; border: 2px solid #fffaf0; box-sizing: content-box; border-radius: 50%; background: #315f78; }
+.chapter-scratchpad-launch.has-error .chapter-scratchpad-dot { background: #aa4a36; }
+.chapter-scratchpad { position: absolute; pointer-events: auto; width: min(480px, 100%); height: min(260px, 100%); display: flex; flex-direction: column; min-height: 0; overflow: hidden; border: 1px solid #d7ccb3; border-radius: 14px; background: #fffaf0; color: #303a34; box-shadow: 0 12px 36px #303a3429, 0 2px 6px #303a3414; }
+.chapter-scratchpad.expanded { width: min(620px, 100%); height: min(620px, 100%); }
+.chapter-scratchpad-header { flex: 0 0 auto; display: flex; align-items: center; gap: 3px; padding: 7px 8px; border-bottom: 1px solid #e6deca; }
+.chapter-scratchpad-drag { flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px; padding: 5px 3px; border: 0; color: inherit; background: transparent; font: inherit; font-size: 13px; font-weight: 650; cursor: grab; touch-action: none; }
+.chapter-scratchpad-drag span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.chapter-scratchpad-drag:active { cursor: grabbing; }
+.chapter-scratchpad-tool { display: grid; place-items: center; flex: 0 0 30px; height: 30px; padding: 0; border: 0; border-radius: 7px; color: #61705f; background: transparent; cursor: pointer; }
+.chapter-scratchpad-tool:hover { background: #eee8d8; }
+.chapter-scratchpad-launch > svg, .chapter-scratchpad-header svg { width: 18px; height: 18px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.chapter-scratchpad-drag svg { color: #9a9c8d; stroke-width: 2.5; }
+.chapter-scratchpad-layer button:focus-visible { outline: 3px solid #638aa8; outline-offset: -2px; }
+.chapter-scratchpad-source { flex: 0 0 auto; padding: 9px 15px 5px; color: #7b806f; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.chapter-scratchpad-body { flex: 1 1 auto; min-height: 0; overflow: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #c4c4b2 transparent; }
+.chapter-scratchpad-editor .bn-container[data-color-scheme="light"] { --bn-colors-editor-background: #fffaf0; --bn-colors-editor-text: #303a34; background: #fffaf0; }
+.chapter-scratchpad-editor .bn-editor { min-height: 185px; padding: 8px 25px 40px 36px; font-size: 14px; line-height: 1.7; background: #fffaf0; }
+.chapter-scratchpad:not(.expanded) .bn-editor { min-height: 120px; padding-bottom: 24px; }
+.chapter-scratchpad-editor .bn-block-content[data-content-type="heading"] { font-size: 1.3em; }
+.chapter-scratchpad-editor .bn-block-content[data-content-type="image"] img { max-height: 240px; object-fit: contain; }
+.chapter-scratchpad-editor .bn-block-content[data-content-type="table"] { max-width: 100%; overflow-x: auto; }
+/* Compact slash menu for the limited height of a floating scratchpad. */
+.chapter-scratchpad-editor .bn-mantine .bn-suggestion-menu { width: 240px; max-width: min(240px, calc(100vw - 32px)); padding: 4px; border: 1px solid #dedbcd; border-radius: 9px; background: #fffdf7; box-shadow: 0 5px 18px #303a341a; scrollbar-width: thin; scrollbar-color: #c4c7b9 transparent; overscroll-behavior: contain; }
+.chapter-scratchpad-editor .bn-mantine .bn-suggestion-menu-item { min-height: 30px; padding: 5px 8px; gap: 8px; border-radius: 5px; }
+.chapter-scratchpad-editor .bn-mt-suggestion-menu-item-section[data-position="left"] { width: 18px; height: 18px; flex: 0 0 18px; padding: 0; margin: 0; background: transparent; color: #798472; }
+.chapter-scratchpad-editor .bn-mt-suggestion-menu-item-section[data-position="left"] svg { width: 16px; height: 16px; }
+.chapter-scratchpad-editor .bn-mt-suggestion-menu-item-body { padding: 0; }
+.chapter-scratchpad-editor .bn-mt-suggestion-menu-item-title { font-size: 12px; line-height: 20px; font-weight: 500; }
+.chapter-scratchpad-editor .bn-mt-suggestion-menu-item-subtitle, .chapter-scratchpad-editor .bn-mt-suggestion-menu-item-section[data-position="right"] { display: none; }
+.chapter-scratchpad-editor .bn-mantine .bn-suggestion-menu-label { padding: 4px 8px; font-size: 10px; line-height: 14px; color: #8a9082; }
+.chapter-scratchpad-editor .bn-mantine .bn-suggestion-menu-item:is(:hover, [aria-selected="true"]) { background: #edf0e5; }
+.chapter-scratchpad-loading { padding: 15px; color: #737c6c; font-size: 13px; }
+.chapter-scratchpad-footer { flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 7px 14px 9px; border-top: 1px solid #e6deca; font-size: 10.5px; color: #777e6e; }
+.chapter-scratchpad-error { flex: 0 1 auto; max-height: 100px; overflow: auto; margin: 0; padding: 8px 12px; color: #8a3f2f; background: #fff0e8; font-size: 12px; line-height: 1.5; }
+.chapter-scratchpad-error button { margin: 5px 0 0; padding: 4px 8px; border: 1px solid #caa998; border-radius: 6px; background: #fff9f0; color: #733b2c; font: inherit; cursor: pointer; }
+@media (max-width: 1100px) {
+  /* The existing companion sidebar overlays the reader at this breakpoint. */
+  .workspace-shell:has(.reader-companion-tabs):not(.chat-collapsed) .chapter-scratchpad-layer { right: max(12px, calc(var(--chat-panel-width) - 34px)); }
+}
+@media (pointer: coarse) { .chapter-scratchpad-tool { flex-basis: 44px; height: 44px; } .chapter-scratchpad-editor .bn-editor { font-size: 16px; } }

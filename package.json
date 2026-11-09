@@ -1,0 +1,111 @@
+{
+  "name": "reader-ai-range-chat-example",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Deep Reader — EPUB reading, AI conversations, reading notes and spaced review",
+  "type": "module",
+  "main": "dist-electron/main.cjs",
+  "scripts": {
+    "build": "npm run build:main && vite build",
+    "build:main": "esbuild src/main/main.ts src/preload/preload.ts --bundle --platform=node --format=cjs --outdir=dist-electron --entry-names=[name] --out-extension:.js=.cjs --loader:.md=text --loader:.py=text --external:electron --external:@remotion/renderer",
+    "dev": "concurrently -k -n renderer,electron -c blue,green \"vite --host 127.0.0.1 --port 45173 --strictPort\" \"wait-on tcp:45173 && npm run build:main && cross-env VITE_DEV_SERVER_URL=http://127.0.0.1:45173 electron .\"",
+    "start": "npm run build && electron .",
+    "test": "vitest run --root . tests/smoke.test.ts tests/epub-cover.test.ts tests/epub-formula.test.ts tests/svg-book-images.test.ts tests/chapter-navigation.test.ts tests/reading-input-suggestion.test.ts tests/chat-image-compression.test.ts tests/chat-conversation-store.test.ts tests/conversation-topic-title.test.ts tests/reading-conversation-export.test.ts tests/bundled-skill.test.ts tests/app-ipc.test.ts tests/codex-launch.test.ts tests/dev-launch.test.ts tests/reader-permissions.test.ts tests/reading-range.test.ts tests/reader-context-menu-lifecycle.test.tsx tests/reading-segment-shortcuts.test.ts tests/learning-question-quiz.test.ts tests/learning-question-card.test.tsx tests/learning-modes.test.tsx tests/reading-coach.test.ts tests/reading-coach-ui.test.tsx tests/self-retelling.test.ts tests/self-retelling-card.test.tsx tests/reading-note.test.ts tests/reading-note-source.test.ts tests/reading-note-reference.test.ts tests/reading-note-reference-ui.test.tsx tests/reading-note-revision.test.ts tests/reading-note-revision-ui.test.tsx tests/reading-note-tags.test.ts tests/reading-note-tags-ui.test.tsx tests/reading-note-card.test.tsx tests/conversation-note-canvas.test.tsx tests/reading-note-ai.test.ts tests/reading-note-ai-controller.test.ts tests/reading-note-memory-image.test.ts tests/memory-image-template-settings.test.ts tests/memory-image-settings-ui.test.tsx tests/memory-image-generation-progress.test.tsx tests/reading-note-rich-document.test.ts tests/reading-note-export.test.ts tests/heptabase-import.test.ts tests/heptabase-cli.test.ts tests/heptabase-import-ui.test.tsx tests/reading-note-upload.test.ts tests/card-note-upload-panel.test.tsx tests/reading-note-attachments.test.ts tests/reading-note-editor-adapter.test.ts tests/reading-note-editor.test.tsx tests/reading-note-two-sided.test.tsx tests/reading-note-canvas.test.tsx tests/reading-note-library.test.ts tests/reading-note-library-ui.test.tsx tests/reading-note-library-lazy.test.tsx tests/reading-note-book-filter.test.tsx tests/reader-notes-panel.test.tsx tests/reader-videos-panel.test.tsx tests/book-shelf-pinning.test.tsx tests/ui.test.tsx tests/chapter-scratchpad.test.ts tests/chapter-scratchpad-ui.test.ts tests/spaced-review.test.ts tests/review-progress.test.ts tests/spaced-review-ipc.test.ts tests/spaced-review-ui.test.tsx tests/reading-voice.test.ts tests/reading-voice-media.test.ts tests/reading-voice-ipc.test.ts tests/reading-voice-notice.test.tsx tests/review-voice.test.ts tests/whiteboard-store.test.ts tests/whiteboard-session.test.ts tests/whiteboard-ipc.test.ts tests/whiteboard-ui.test.tsx tests/practice-store.test.ts tests/practice-ipc.test.ts tests/practice-ui.test.tsx tests/concept-video.test.ts tests/concept-video-source-images.test.ts tests/concept-video-ipc.test.ts tests/concept-video-ui.test.tsx tests/concept-video-activity.test.tsx tests/concept-video-generation.test.ts tests/concept-video-simple.test.tsx tests/concept-video-ai.test.ts tests/concept-video-narration.test.ts tests/concept-video-story.test.ts tests/concept-video-program.test.ts tests/concept-video-engines.test.ts tests/concept-video-engines-ui.test.tsx tests/concept-video-comparison.test.ts tests/concept-video-comparison-ui.test.tsx",
+    "test:codex": "vitest run --root . tests/real-codex-connect.test.ts",
+    "probe:voice": "node tests/probes/realtime-reading-voice.mjs",
+    "typecheck": "tsc --noEmit",
+    "test:review-voice:real": "REAL_REVIEW_VOICE=1 vitest run --root . tests/real-review-voice.test.ts",
+    "test:voice:real": "vitest run --root . tests/real-reading-voice.test.ts",
+    "test:video:real": "vitest run --root . tests/concept-video-render.test.ts",
+    "test:video:program": "vitest run --root . tests/concept-video-program-render.test.ts",
+    "test:video:codex": "REAL_VIDEO_PROGRAM=1 vitest run --root . tests/real-concept-video-program.test.ts",
+    "test:video:revision": "REAL_VIDEO_REVISION=1 vitest run --root . tests/real-concept-video-revision.test.ts",
+    "setup:video:remotion": "node -e \"require('@remotion/renderer').ensureBrowser().then(r=>console.log(r.path))\"",
+    "setup:video:manim": "python3 -m venv .video-venv && .video-venv/bin/python -m pip install --upgrade pip && .video-venv/bin/python -m pip install --use-pep517 -r requirements-video.txt",
+    "test:video:comparison": "vitest run --root . tests/concept-video-comparison-render.test.ts",
+    "test:video:engines": "vitest run --root . tests/concept-video-engine-render.test.ts tests/concept-video-engine-audio.test.ts",
+    "test:video:engines:codex": "REAL_VIDEO_ENGINES=1 vitest run --root . tests/real-concept-video-engines.test.ts",
+    "dist:mac": "npm run build && electron-builder --mac dmg zip --arm64 --publish never"
+  },
+  "dependencies": {
+    "@blocknote/core": "^0.54.0",
+    "@blocknote/mantine": "^0.54.0",
+    "@blocknote/react": "^0.54.0",
+    "@mantine/core": "^9.0.2",
+    "@mantine/hooks": "^9.0.2",
+    "@remotion/bundler": "4.0.532",
+    "@remotion/renderer": "4.0.532",
+    "fast-xml-parser": "^5.10.1",
+    "jszip": "^3.10.1",
+    "katex": "^0.16.47",
+    "parse5": "7.3.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "react-markdown": "^10.1.0",
+    "rehype-katex": "^7.0.1",
+    "remark-gfm": "^4.0.1",
+    "remark-math": "^6.0.0",
+    "remotion": "4.0.532",
+    "ts-fsrs": "5.4.1"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.6",
+    "@types/node": "^26.1.1",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.3",
+    "concurrently": "^10.0.3",
+    "cross-env": "^10.1.0",
+    "electron": "^43.1.1",
+    "electron-builder": "^26.18.0",
+    "esbuild": "^0.28.1",
+    "jsdom": "^30.0.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.1.5",
+    "vitest": "^4.1.10",
+    "wait-on": "^9.0.10"
+  },
+  "author": "highsunday",
+  "build": {
+    "appId": "com.highsunday.deepreader",
+    "productName": "Deep Reader",
+    "directories": {
+      "output": "release"
+    },
+    "asar": false,
+    "npmRebuild": false,
+    "files": [
+      "dist-electron/**/*",
+      "dist-renderer/**/*",
+      "scripts/packaged-main.cjs",
+      "package.json"
+    ],
+    "extraMetadata": {
+      "main": "scripts/packaged-main.cjs"
+    },
+    "mac": {
+      "category": "public.app-category.education",
+      "icon": "src/renderer/public/app-icon.png",
+      "identity": null,
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "arm64"
+          ]
+        }
+      ]
+    },
+    "artifactName": "Deep-Reader-${version}-${os}-${arch}.${ext}",
+    "dmg": {
+      "title": "Deep Reader ${version}"
+    }
+  }
+}

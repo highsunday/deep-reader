@@ -1,0 +1,58 @@
+.reading-note-revision-scroll { min-height: 0; overflow: auto; overscroll-behavior: contain; flex: 1; }
+.reading-note-revision { max-width: 840px; margin: auto; padding: 24px 32px 40px; color: #293730; overflow-wrap: anywhere; }
+.reading-note-revision > h2 { font-size: 28px; line-height: 1.45; margin: 0 0 20px; }
+.reading-note-revision ins, .revision-legend ins { background: transparent; color: #175a32; text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+.reading-note-revision del, .revision-legend del { background: transparent; color: #922d32; text-decoration: line-through; }
+.reading-note-revision .revision-inline { font-size: 16px; line-height: 1.8; white-space: pre-wrap; margin: 12px 0; }
+.reading-note-revision .revision-heading { font-weight: 700; font-size: 22px; }
+.reading-note-revision .revision-heading.level-1 { font-size: 26px; }
+.reading-note-revision blockquote { border-left: 2px solid #bdc8c0; padding-left: 16px; }
+/* Each rich fragment is content, not a full editing canvas. */
+.reading-note-revision .bn-editor,
+.reading-note-canvas .reading-note-revision .bn-editor { min-height: 0; padding: 0; background: transparent; font-size: 16px; line-height: 1.8; }
+.reading-note-revision .bn-container { --bn-colors-editor-background: transparent; background: transparent; }
+.revision-block-change { margin-block: 16px; }
+.revision-deleted, .revision-inserted { margin: 8px 0; border: 0; padding: 0; }
+.revision-deleted { background: transparent; color: #922d32; }
+.revision-inserted { background: transparent; color: #175a32; }
+.revision-deleted > small, .revision-inserted > small { display: block; font-size: 11px; font-weight: 600; padding-bottom: 4px; }
+.revision-deleted > small { color: #922d32; }
+.revision-inserted > small { color: #175a32; }
+.revision-deleted .bn-inline-content { color: #922d32; text-decoration: line-through; text-decoration-color: #922d32; }
+.revision-inserted .bn-inline-content { color: #175a32; text-decoration: underline; text-decoration-color: #175a32; text-underline-offset: 3px; }
+.revision-modes { display: flex; flex-wrap: wrap; gap: 2px; padding: 3px; width: fit-content; border-radius: 8px; background: #edf0eb; }
+.revision-modes button,
+.note-ai-revision-controls .revision-modes button,
+.reading-note-preview-controls .revision-modes button { min-height: 32px; padding: 5px 10px; border: 1px solid transparent; border-radius: 6px; font: inherit; font-size: 13px; color: #627065; background: transparent; cursor: pointer; }
+.revision-modes button[aria-pressed="true"],
+.note-ai-revision-controls .revision-modes button[aria-pressed="true"],
+.reading-note-preview-controls .revision-modes button[aria-pressed="true"] { color: #244e60; background: #fffefa; border-color: #d8dfd6; box-shadow: 0 1px 3px #29373012; font-weight: 600; }
+.revision-modes button:focus-visible, .note-ai-revision-decisions button:focus-visible { outline: 2px solid #315e73; outline-offset: 2px; }
+.revision-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 11px; }
+.revision-legend ins, .revision-legend del { padding: 1px 5px; border-radius: 3px; }
+.revision-close { align-self: flex-end; margin: 8px 20px; }
+.revision-preview-body { display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.note-ai-revision-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 24px; padding: 0 0 12px; border-bottom: 1px solid #e0e4dc; }
+.note-ai-revision-controls .revision-legend { flex-basis: 100%; }
+.note-ai-revision-decisions { display: flex; flex-wrap: wrap; gap: 6px; margin-left: auto; }
+.note-ai-revision-decisions button { min-height: 34px; padding: 6px 12px; border: 1px solid #305e70; border-radius: 7px; background: #305e70; color: white; font: inherit; font-size: 13px; cursor: pointer; }
+.note-ai-revision-decisions button.reject { color: #627065; border-color: transparent; background: transparent; }
+.note-ai-revision-decisions button.reject:hover { background: #edf0eb; }
+.note-ai-revision-decisions button:disabled { opacity: .5; cursor: default; }
+.reading-note-ai-note-preview .reading-note-revision { padding: 0; }
+.reading-note-ai-note-preview .reading-note-revision > h2 { font-size: clamp(24px, 3cqw, 30px); line-height: 1.5; }
+.reading-note-revision .reading-note-metadata { margin-block: 0 20px; padding-block: 8px; border-top: 0; font-size: 12px; }
+.reading-note-ai-panel .reading-note-ai-proposal { margin: 0; padding: 10px 18px; border: 0; border-top: 1px solid #e4e7df; border-radius: 0; background: transparent; }
+.reading-note-ai-panel .reading-note-ai-proposal button { padding: 5px 8px; color: #315e73; background: transparent; border: 0; font-weight: 600; }
+.reading-note-ai-panel .reading-note-ai-proposal button:hover { background: #edf0eb; }
+.note-ai-request-details summary { cursor: pointer; font-size: 14px; line-height: 1.65; }
+.note-ai-request-details summary span { display: block; padding-top: 4px; font-size: 11px; color: #627065; }
+.note-ai-request-details[open] summary span { display: none; }
+.note-ai-request-details > p { white-space: pre-wrap; margin-top: 12px; }
+@media (max-width: 640px) {
+  .reading-note-revision { padding: 20px 12px 32px; }
+  .reading-note-revision > h2 { font-size: 24px; }
+  .reading-note-preview-controls .conversation-note-decisions { flex-wrap: wrap; }
+  .note-ai-revision-controls { gap: 8px; }
+  .note-ai-revision-decisions { margin-left: 0; }
+}

@@ -1,0 +1,155 @@
+// Trusted renderer host. The generated program only enters a sandboxed Web Worker.
+const { app, BrowserWindow, session } = require('electron');
+const { readFileSync, writeFileSync, statSync, mkdirSync } = require('node:fs');
+const { join, dirname } = require('node:path');
+const { spawn, execFile } = require('node:child_process');
+const { promisify } = require('node:util');
+const { once } = require('node:events');
+const execute = promisify(execFile);
+const [jobPath, ffmpeg, ffprobe] = process.argv.slice(2);
+const directory = dirname(jobPath);
+app.setPath('userData', join(directory, 'runtime-data'));
+app.disableHardwareAcceleration();
+app.enableSandbox();
+const W = 1920, H = 1080, FPS = 30;
+
+// No project files, credentials, preload bridge or Node APIs enter this realm.
+function browserHost() {
+  let worker;
+  let sequence = 0;
+  window.setup = code => {
+    worker?.terminate();
+    const source = `(${function() {
+      let draw;
+      const canvas = new OffscreenCanvas(1920, 1080);
+      const ctx = canvas.getContext('2d');
+      const output = new OffscreenCanvas(1920, 1080);
+      const overlay = output.getContext('2d');
+      self.onmessage = async ({ data }) => {
+        try {
+          if (data.code !== undefined) {
+            draw = new Function('ctx', 't', 'width', 'height', 'duration', '"use strict";\n' + data.code);
+            self.postMessage({ id: data.id, ready: true });
+            return;
+          }
+          ctx.reset();
+          ctx.scale(2, 2);
+          draw(ctx, data.t, 960, 540, data.duration);
+          if (canvas.width !== 1920 || canvas.height !== 1080) throw Error('Animation code cannot resize the canvas.');
+          overlay.reset();
+          overlay.fillStyle = '#ffffff'; overlay.fillRect(0, 0, 1920, 1080);
+          overlay.drawImage(canvas, 0, 0);
+          overlay.fillStyle = 'rgba(12,18,28,0.93)'; overlay.fillRect(0, 900, 1920, 180);
+          overlay.font = '48px sans-serif'; overlay.textAlign = 'center'; overlay.textBaseline = 'middle'; overlay.fillStyle = '#ffffff';
+          overlay.fillText(data.caption, 960, 954, 1760);
+          const png = await output.convertToBlob({ type: 'image/png' });
+          const bytes = new Uint8Array(await png.arrayBuffer());
+          let binary = '';
+          for (let i = 0; i < bytes.length; i += 8192) binary += String.fromCharCode(...bytes.subarray(i, i + 8192));
+          self.postMessage({ id: data.id, png: btoa(binary) });
+        } catch (error) { self.postMessage({ id: data.id, error: String(error.message || error).slice(0, 1000) }); }
+      };
+    }.toString()})();`;
+    const url = URL.createObjectURL(new Blob([source], { type: 'text/javascript' }));
+    worker = new Worker(url); URL.revokeObjectURL(url);
+    return window.requestFrame({ code });
+  };
+  window.requestFrame = data => new Promise((resolve, reject) => {
+    const id = ++sequence;
+    const timer = setTimeout(() => { worker.terminate(); reject(Error('An animation frame timed out. Revise the program and try again.')); }, 8000);
+    worker.onerror = event => { clearTimeout(timer); reject(Error(event.message)); };
+    worker.onmessage = event => {
+      if (event.data.id !== id) return;
+      clearTimeout(timer);
+      event.data.error ? reject(Error(event.data.error)) : resolve(event.data.png || true);
+    };
+    worker.postMessage({ ...data, id });
+  });
+}
+function chunks(text) {
+  return (text.match(/[^，。！？；：]+[，。！？；：]*/gu) || [text]).flatMap(phrase => Array.from(phrase).join('').match(/.{1,32}/gu) || []).filter(Boolean);
+}
+function stamp(seconds) {
+  const ms = Math.round(seconds * 1000);
+  return `${String(Math.floor(ms/3600000)).padStart(2,'0')}:${String(Math.floor(ms/60000)%60).padStart(2,'0')}:${String(Math.floor(ms/1000)%60).padStart(2,'0')},${String(ms%1000).padStart(3,'0')}`;
+}
+async function probe(file) { return JSON.parse((await execute(ffprobe, ['-v','error','-show_format','-show_streams','-of','json',file], { timeout: 30000 })).stdout); }
+async function main() {
+  const { plan } = JSON.parse(readFileSync(jobPath, 'utf8'));
+  if (plan.animation !== 'program' || plan.program?.runtime !== 'canvas2d-v1') throw Error('A Codex animation program is required.');
+  await app.whenReady();
+  const isolated = session.fromPartition('concept-video-isolated');
+  isolated.webRequest.onBeforeRequest((details, callback) => callback({ cancel: !details.url.startsWith('data:') && !details.url.startsWith('blob:') }));
+  isolated.setPermissionRequestHandler((_contents, _permission, callback) => callback(false));
+  isolated.setPermissionCheckHandler(() => false);
+  const win = new BrowserWindow({ show: false, width: W, height: H, webPreferences: { session: isolated, sandbox: true, contextIsolation: true, nodeIntegration: false, nodeIntegrationInWorker: false, webSecurity: true, backgroundThrottling: false } });
+  win.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
+  win.webContents.on('will-navigate', event => event.preventDefault());
+  const html = `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval'; worker-src blob:; connect-src 'none'; style-src 'none'; img-src 'none'; font-src 'none'"><script>(${browserHost.toString()})()</script>`;
+  await win.loadURL('data:text/html;charset=utf-8,' + encodeURIComponent(html));
+  const evaluate = code => win.webContents.executeJavaScript(code);
+  const durations = [], subtitles = [], timeline = [];
+  let total = 0;
+  // Validate first/middle/last frames before spending time on speech and encoding.
+  for (const scene of plan.scenes) {
+    await evaluate(`window.setup(${JSON.stringify(scene.code)})`);
+    for (const t of [0, 0.5, 1]) await evaluate(`window.requestFrame(${JSON.stringify({ t, duration: 6, caption: '' })})`);
+  }
+  for (let i = 0; i < plan.scenes.length; i++) {
+    const scene = plan.scenes[i];
+    let duration = Math.max(6, scene.narration.length / (plan.pace === 'slow' ? 3.5 : 5));
+    if (plan.narration) {
+      duration = Number((await probe(join(directory,`${i}.wav`))).format.duration) + 0.6;
+    }
+    duration = Math.ceil(duration * FPS) / FPS;
+    if (!Number.isFinite(duration) || duration <= 0 || total + duration > 300) throw Error('The video exceeds five minutes. Shorten it.');
+    total += duration; durations.push(duration);
+  }
+  let offset = 0;
+  for (let i = 0; i < plan.scenes.length; i++) {
+    const scene = plan.scenes[i], duration = durations[i];
+    await evaluate(`window.setup(${JSON.stringify(scene.code)})`);
+    const captions = chunks(scene.narration), weight = captions.reduce((sum, s) => sum+s.length, 0);
+    let cumulative = 0;
+    const ends = captions.map(caption => {
+      const start = cumulative/weight; cumulative += caption.length;
+      subtitles.push({ start: offset+duration*start, end: offset+duration*cumulative/weight, text: caption });
+      return cumulative/weight;
+    });
+    const args = ['-y','-v','error','-f','image2pipe','-framerate',String(FPS),'-vcodec','png','-i','pipe:0'];
+    if (plan.narration) args.push('-i',join(directory,`${i}.wav`),'-af','apad','-c:a','aac','-ar','44100','-ac','1');
+    args.push('-t',String(duration),'-c:v','libx264','-preset','fast','-crf','19','-pix_fmt','yuv420p','-movflags','+faststart',join(directory,`${i}.mp4`));
+    const encoder = spawn(ffmpeg, args, { stdio: ['pipe', 'ignore', 'pipe'] });
+    let errors = '';
+    encoder.stderr.on('data', data => { errors = (errors+data).slice(-2000); });
+    const finished = new Promise((resolve, reject) => { encoder.on('error', reject); encoder.on('close', code => code === 0 ? resolve() : reject(Error(errors || 'Video encoding failed.'))); });
+    void finished.catch(() => {});
+    encoder.stdin.on('error', () => {});
+    try {
+      const count = Math.round(duration*FPS);
+      for (let frame = 0; frame < count; frame++) {
+        const t = frame / Math.max(1,count-1);
+        const caption = captions[Math.max(0, ends.findIndex(end => t < end))] || '';
+        const png = await evaluate(`window.requestFrame(${JSON.stringify({ t, duration, caption: t === 1 ? captions.at(-1) : caption })})`);
+        if (typeof png !== 'string' || png.length > 16000000) throw Error('An animation frame is invalid or too large.');
+        const bytes = Buffer.from(png, 'base64');
+        if (frame === Math.floor(count/2)) writeFileSync(join(directory,`preview-${i+1}.png`), bytes);
+        if (encoder.exitCode !== null || encoder.stdin.destroyed) throw Error(errors || 'Video encoding stopped early.');
+        if (!encoder.stdin.write(bytes)) await Promise.race([once(encoder.stdin, 'drain'), finished.then(() => { throw Error('Video encoding stopped early.'); })]);
+        if (frame % FPS === 0 && statSync(join(directory,`${i}.mp4`), { throwIfNoEntry: false })?.size > 100000000) throw Error('The video exceeds 100 MB.');
+      }
+      encoder.stdin.end(); await finished;
+    } catch (error) { encoder.kill(); throw error; }
+    timeline.push({ id: scene.id, start: offset, end: offset+duration }); offset += duration;
+  }
+  writeFileSync(join(directory,'concat.txt'), plan.scenes.map((_,i)=>`file '${i}.mp4'`).join('\n'));
+  const final = join(directory,'video.mp4');
+  await execute(ffmpeg, ['-y','-v','error','-f','concat','-safe','0','-i',join(directory,'concat.txt'),'-c','copy','-movflags','+faststart',final], { timeout: 120000 });
+  const metadata = await probe(final), bytes = statSync(final).size;
+  if (!metadata.streams.some(s => s.codec_name === 'h264' && s.width === W && s.height === H && s.r_frame_rate === `${FPS}/1`) || bytes > 100000000) throw Error('Video validation failed.');
+  await execute(ffmpeg, ['-v','error','-i',final,'-f','null','-'], { timeout: 120000 });
+  writeFileSync(join(directory,'subtitles.srt'), subtitles.map((s,i)=>`${i+1}\n${stamp(s.start)} --> ${stamp(s.end)}\n${s.text}`).join('\n\n')+'\n');
+  writeFileSync(join(directory,'result.json'), JSON.stringify({ durationSeconds: offset, bytes, scenes: timeline }));
+  win.destroy(); app.exit(0);
+}
+main().catch(error => { console.error(`Codex animation failed: ${error.message}`); app.exit(1); });

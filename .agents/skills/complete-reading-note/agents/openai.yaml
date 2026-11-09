@@ -1,0 +1,4 @@
+interface:
+  display_name: "Complete Reading Note"
+  short_description: "Complete a draft using reading and conversation context"
+  default_prompt: "Use $complete-reading-note to complete this draft from the supplied reading and conversation context."

@@ -1,0 +1,120 @@
+.review-dashboard { width: 100%; max-width: 920px; margin: 0 auto; display: grid; gap: 14px; padding-bottom: 20px; }
+.review-growth, .review-activity { border: 1px solid #dde2e5; border-radius: 16px; background: #fffefa; padding: 20px 24px; min-width: 0; }
+.review-daily-heading, .review-growth > header, .review-activity > header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.review-dashboard h2 { margin: 0; font-size: 18px; font-weight: 650; line-height: 1.5; }
+.review-dashboard p { color: #75818a; font-size: 12px; line-height: 1.7; margin: 5px 0 0; }
+.review-daily { display: grid; grid-template-columns: minmax(138px, auto) minmax(0, 1fr) auto; align-items: center; gap: 18px; padding: 14px 18px; border: 1px solid #d5dfe6; border-radius: 14px; background: rgb(255 253 248 / 78%); box-shadow: 0 6px 18px rgb(55 74 90 / 5%); }
+.review-daily-heading { display: grid; gap: 2px; }
+.review-dashboard .review-daily-heading h2 { font-family: inherit; font-size: 12px; color: #344956; }
+.review-daily-heading small { font-size: 9px; color: #817a70; }
+.review-daily dl { display: grid; grid-template-columns: 1fr 1fr; margin: 0; }
+.review-daily-item { display: flex; justify-content: center; align-items: baseline; gap: 9px; padding: 3px 16px; min-width: 0; }
+.review-daily-item + .review-daily-item { border-left: 1px solid #e1e6ea; }
+.review-daily-item dt { color: #6f756d; font-size: 11px; font-weight: 700; }
+.review-daily-item dd { display: flex; align-items: baseline; gap: 2px; margin: 0; font-family: Georgia, serif; color: #2d5b75; line-height: 1; font-variant-numeric: tabular-nums; }
+.review-daily-item dd strong { font-size: 25px; }
+.review-daily-item dd span { font-size: 14px; font-weight: 650; color: #70776f; }
+.spaced-review-workspace .review-limit-button { display: grid; place-items: center; width: 30px; height: 30px; padding: 0; border: 0; background: transparent; color: #5b7b90; }
+.review-dashboard .review-home-card { width: 100%; margin: 0; padding: 20px 24px; border-radius: 16px; text-align: left; background: #eaf1f6; border-color: #d7e3ec; }
+.review-ready-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 20px; }
+.review-ready-copy { min-width: 0; }
+.review-ready-row > button { min-height: 48px; padding-inline: 24px; }
+.review-insights { border-top: 1px solid #e4e9ed; padding-top: 14px; font-size: 12px; color: #52758c; }
+.review-insights .review-trend { border: 0; padding-top: 0; }
+.review-insights .review-activity { padding: 20px 0 0; margin-top: 20px; border: 0; border-top: 1px solid #e4e9ed; border-radius: 0; }
+.review-insights .review-activity h2 { font-size: 15px; }
+.review-dashboard .review-home-card h2 { margin: 7px 0 5px; font: 700 26px/1.15 Georgia, serif; }
+.review-dashboard .review-home-card h2 strong { font: inherit; color: inherit; }
+/* F38 1.4: original app type, surfaces and layout; blue accents use the app primary color. Reference taken from the original app's review-focus-card. */
+.spaced-review-workspace:not(.is-reviewing) { padding-top: 34px; color: #263947; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+.spaced-review-workspace:not(.is-reviewing) .spaced-review-header { max-width: 920px; }
+.review-page-eyebrow { color: #80745a; font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+.review-dashboard .review-home-card { border-radius: 18px; background: #fffdf8; border-color: #d2dee7; box-shadow: 0 12px 30px rgb(52 73 90 / 8%); }
+.review-dashboard .review-home-card.has-ready-cards { padding: 26px 30px 18px; border: 0; background: radial-gradient(circle at 92% 0%, rgb(126 174 205 / 30%), transparent 34%), linear-gradient(135deg, #23475e 0%, #2d5b75 100%); box-shadow: 0 18px 38px rgb(30 57 77 / 20%); }
+.review-focus-symbol { display: grid; place-items: center; width: 58px; height: 58px; border-radius: 19px; border: 1px solid rgb(65 110 141 / 14%); color: #456f8a; background: #dceaf3; }
+.has-ready-cards .review-focus-symbol { border-color: rgb(255 255 255 / 12%); color: #f7f2e7; background: rgb(255 255 255 / 10%); }
+.review-focus-status { display: inline-flex; align-items: center; gap: 7px; color: #c3ddec; font-size: 11px; font-weight: 800; letter-spacing: .03em; }
+.review-focus-status i { width: 7px; height: 7px; border-radius: 50%; background: #9ecde7; box-shadow: 0 0 0 4px rgb(158 205 231 / 12%); }
+.review-dashboard .has-ready-cards h2 { color: #fffdf7; }
+.review-dashboard .has-ready-cards p { color: #d0e0eb; }
+.spaced-review-workspace .has-ready-cards .review-primary { border: 0; border-radius: 12px; background: #fffaf0; color: #23475e; font-size: 14px; font-weight: 750; box-shadow: 0 9px 22px rgb(18 35 49 / 22%); }
+.spaced-review-workspace .has-ready-cards .review-primary:hover:not(:disabled) { background: #fff; color: #23475e; }
+.spaced-review-workspace .has-ready-cards .review-quiet { color: #f7f2e7; }
+.spaced-review-workspace .has-ready-cards .review-quiet:hover:not(:disabled) { background: rgb(255 255 255 / 10%); }
+.review-growth { box-shadow: 0 6px 20px rgb(59 53 43 / 5%); border-color: #dddcd5; }
+.review-growth > header h2 { font-family: Georgia, serif; color: #344956; }
+.review-eyebrow { display: block; margin-bottom: 5px; font-size: 11px; letter-spacing: .12em; color: #768b99; }
+.review-period { font-size: 11px; color: #768b99; border: 1px solid #dfe6eb; padding: 5px 10px; border-radius: 20px; white-space: nowrap; }
+.review-growth-numbers { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, .9fr); gap: 24px; margin: 18px 0; }
+.review-solid { padding-block: 10px; }
+.review-solid > span { display: block; font-size: 13px; color: #586c7a; }
+.review-solid > strong { display: block; color: var(--primary, #2d5b75); font-family: Georgia, serif; font-size: 56px; font-weight: 700; line-height: 1.15; letter-spacing: -.035em; font-variant-numeric: tabular-nums; }
+.review-solid small { margin-left: 8px; font-family: Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: normal; font-size: 12px; font-weight: 400; color: #7b8b95; }
+.review-solid p { color: #3d7293; }
+.review-growth-numbers dl { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin: 0; align-items: stretch; border-block: 1px solid #e6e4dd; }
+.review-growth-numbers dl > div { display: grid; align-content: center; padding: 14px; }
+.review-growth-numbers dl > div + div { border-left: 1px solid #e6e4dd; }
+.review-growth-numbers dt { font-size: 12px; color: #75848e; }
+.review-growth-numbers dd { margin: 8px 0 0; font: 700 30px/1 Georgia, serif; font-variant-numeric: tabular-nums; }
+.review-growth-numbers dd small { font-family: Inter, ui-sans-serif, system-ui, sans-serif; font-size: 12px; color: #849099; font-weight: 400; }
+.review-trend { border-top: 1px solid #e4e9ed; padding-top: 18px; }
+.review-trend > div:first-child { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.review-trend strong { font-size: 12px; font-weight: 500; }
+.review-trend small, .review-trend-axis { color: #899ba8; font-size: 10px; }
+.review-trend svg { width: 100%; height: 150px; display: block; margin: 12px 0 4px; overflow: visible; }
+.review-trend line { stroke: #edf1f4; stroke-width: 1; }
+.review-trend path { fill: none; stroke: #5685a4; stroke-width: 2.5; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; }
+.review-trend circle { fill: var(--primary, #2d5b75); }
+.review-trend-axis { display: flex; justify-content: space-between; }
+.review-dashboard .review-method { font-size: 10px; margin-top: 18px; }
+.review-activity header > strong { color: #55738a; font-size: 12px; font-weight: 500; white-space: nowrap; }
+.review-activity header > strong span { margin: 0 5px; color: #9aabb8; }
+.review-activity ol { list-style: none; display: grid; grid-template-columns: repeat(15, minmax(0, 1fr)); gap: 6px; padding: 0; margin: 22px 0 12px; }
+.review-activity [data-level] { background: #edf2f5; color: #8195a2; border: 1px solid #e0e8ee; border-radius: 5px; }
+.review-activity [data-level="1"] { background: #dceaf3; color: #5b7688; border-color: #d2e3ee; }
+.review-activity [data-level="2"] { background: #b4cfdf; color: #3d6078; border-color: #a8c5d9; }
+.review-activity [data-level="3"] { background: #7da8c3; color: #fff; border-color: #729cb9; }
+.review-activity [data-level="4"] { background: #426e8b; color: #fff; border-color: #3b6582; }
+.review-activity li { display: grid; place-items: center; aspect-ratio: 1.35; position: relative; font-size: 11px; outline-offset: 3px; }
+.review-day-tooltip { display: none; position: absolute; z-index: 2; bottom: calc(100% + 8px); left: 0; width: 190px; padding: 8px; border-radius: 6px; background: #294c63; color: white; font-size: 11px; line-height: 1.6; box-shadow: 0 3px 10px #0002; }
+.review-activity li:nth-child(15n + 12) .review-day-tooltip, .review-activity li:nth-child(15n + 13) .review-day-tooltip, .review-activity li:nth-child(15n + 14) .review-day-tooltip, .review-activity li:nth-child(15n) .review-day-tooltip { right: 0; left: auto; }
+.review-activity li:hover .review-day-tooltip, .review-activity li:focus-visible .review-day-tooltip { display: block; }
+.review-activity footer { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; color: #8396a4; font-size: 10px; }
+.review-activity footer > span:last-child { display: inline-flex; align-items: center; gap: 5px; }
+.review-activity footer i { width: 11px; height: 11px; border-radius: 2px; }
+.review-settings { max-width: 680px; margin: 0 auto; }
+.review-settings h3 { font-size: 20px; margin: 0 0 8px; }
+.review-settings p { font-size: 13px; color: #73818c; line-height: 1.8; }
+.review-setting-row { display: flex; gap: 24px; align-items: center; justify-content: space-between; border-bottom: 1px solid #e1e6e9; padding: 24px 0; }
+.review-setting-row label { font-size: 14px; font-weight: 600; }
+.review-setting-row p { margin: 6px 0 0; max-width: 450px; }
+.review-setting-row input { width: 84px; flex-shrink: 0; padding: 10px 12px; border: 1px solid #cbd9e3; border-radius: 8px; font: inherit; color: var(--primary, #2d5b75); background: #fffefa; }
+.review-settings button { padding: 10px 18px; border: 1px solid var(--primary, #2d5b75); border-radius: 8px; color: #fff; background: var(--primary, #2d5b75); font: inherit; font-size: 13px; cursor: pointer; }
+.review-settings button:disabled { opacity: .6; cursor: wait; }
+.review-settings input:focus-visible, .review-settings button:focus-visible { outline: 3px solid #91b5cd; outline-offset: 3px; }
+.review-settings [role="alert"] { color: #a04d35; }
+.review-settings [role="status"] { color: var(--primary, #2d5b75); }
+.review-settings .review-settings-hint { font-size: 12px; margin: 22px 0; }
+@container review-workspace (max-width: 620px) {
+  .review-daily, .review-growth, .review-activity, .review-dashboard .review-home-card { padding: 20px; }
+  .review-activity > header { align-items: flex-start; flex-direction: column; gap: 10px; }
+  .review-daily { grid-template-columns: 1fr auto; gap: 12px; padding: 14px 18px; }
+  .review-daily dl { grid-column: 1 / -1; grid-row: 2; }
+  .review-daily .review-limit-button { grid-column: 2; grid-row: 1; }
+  .review-daily-item { justify-content: flex-start; padding-inline: 10px; }
+  .review-daily-item:first-child { padding-left: 0; }
+  .review-ready-row { grid-template-columns: auto minmax(0, 1fr); gap: 14px; }
+  .review-ready-row > button { grid-column: 1 / -1; width: 100%; }
+  .review-dashboard .review-home-card.has-ready-cards { padding: 22px; }
+  .review-growth-numbers { grid-template-columns: 1fr; gap: 20px; }
+  .review-solid { border: 0; }
+  .review-growth-numbers dl { padding-top: 0; border-top: 1px solid #e6e4dd; }
+  .review-activity ol { grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 4px; }
+  .review-activity li { aspect-ratio: 1; }
+  .review-activity li:nth-child(n) .review-day-tooltip { left: auto; right: -20px; }
+  .review-activity li:nth-child(10n + 1) .review-day-tooltip, .review-activity li:nth-child(10n + 2) .review-day-tooltip, .review-activity li:nth-child(10n + 3) .review-day-tooltip, .review-activity li:nth-child(10n + 4) .review-day-tooltip, .review-activity li:nth-child(10n + 5) .review-day-tooltip { left: 0; right: auto; }
+}
+@container review-workspace (max-width: 440px) {
+  .review-focus-symbol { width: 48px; height: 48px; border-radius: 15px; }
+}
+@media (max-width: 520px) { .review-setting-row { align-items: flex-start; gap: 12px; } .review-setting-row input { width: 70px; } }

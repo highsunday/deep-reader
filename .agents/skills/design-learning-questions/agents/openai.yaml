@@ -1,0 +1,4 @@
+interface:
+  display_name: "核心理解試卷"
+  short_description: "依閱讀區段產生三至五題核心理解試卷，並逐題批改與修改"
+  default_prompt: "Use $design-learning-questions to create and grade a concise core-question paper from the supplied reading segment."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "自我復述"
+  short_description: "建立並批改兩次閱讀區段復述"
+  default_prompt: "Use $practice-self-retelling with the current reading segment."

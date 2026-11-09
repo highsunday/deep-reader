@@ -1,0 +1,4 @@
+interface:
+  display_name: "Edit Reading Note"
+  short_description: "Revise and appropriately enrich one reading note"
+  default_prompt: "Use $edit-reading-note to revise and appropriately enrich this supplied note."

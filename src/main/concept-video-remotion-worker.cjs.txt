@@ -1,0 +1,74 @@
+// Trusted Node host: generated code is data until it enters an isolated browser.
+const {readFileSync, writeFileSync} = require('node:fs');
+const {join, dirname} = require('node:path');
+const {createRequire} = require('node:module');
+const [jobPath, modules, browserExecutable] = process.argv.slice(2);
+const localRequire = createRequire(join(modules, '..', 'package.json'));
+const {bundle} = localRequire('@remotion/bundler');
+const {openBrowser, renderMedia} = localRequire('@remotion/renderer');
+const {transformSync} = localRequire('esbuild');
+const directory = dirname(jobPath);
+async function main() {
+  const job = JSON.parse(readFileSync(jobPath, 'utf8'));
+  const scenes = job.scenes.map((scene, index) => {
+    // Parsing/transpilation never evaluates AI code in Node or Webpack.
+    let wrapped;
+    try {
+      wrapped = transformSync(`function SceneBody(){\n${scene.code}\n}`, {loader:'jsx',jsx:'transform',jsxFactory:'React.createElement',jsxFragment:'React.Fragment'}).code;
+    } catch (error) {
+      const first = error.errors?.[0], location = first?.location;
+      const excerpt = location?.lineText?.slice(Math.max(0, location.column-100), location.column+100);
+      throw new Error(`Scene ${index+1} (${scene.heading}): ${error.message}${excerpt ? `\nCode near error: ${excerpt}` : ''}`);
+    }
+    return {...scene, compiled: wrapped + '\nreturn SceneBody();'};
+  });
+  const names = ['React','AbsoluteFill','Sequence','interpolate','spring','useCurrentFrame','useVideoConfig','t','width','height','duration'];
+  const entry = `import React from 'react';
+import {registerRoot, Composition, AbsoluteFill, Sequence, interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
+const scenes = ${JSON.stringify(scenes)};
+const draw = scenes.map(s => new Function(...${JSON.stringify(names)},s.compiled));
+function Video({index}) {
+  const frame = useCurrentFrame();
+  const scene = scenes[index], t = frame / Math.max(1,Math.round(scene.duration*30)-1);
+  const caption = scene.captions.find(c=>frame/30<c.end)?.text ?? scene.captions.at(-1)?.text ?? '';
+  return <AbsoluteFill style={{background:'#112233'}}>
+    <div style={{position:'absolute',left:0,top:0,width:960,height:540,transform:'scale(2)',transformOrigin:'0 0'}}>
+      {draw[index](React,AbsoluteFill,Sequence,interpolate,spring,useCurrentFrame,()=>({...useVideoConfig(),width:960,height:540}),t,960,540,scene.duration)}
+    </div>
+    <AbsoluteFill style={{top:900,height:180,background:'rgba(12,18,28,0.97)',color:'white',fontFamily:'sans-serif',fontSize:48,alignItems:'center',justifyContent:'flex-start',paddingTop:24,zIndex:10000}}>{caption}</AbsoluteFill>
+  </AbsoluteFill>;
+}
+registerRoot(()=> <>{scenes.map((s,i)=><Composition key={i} id={'Scene'+i} component={Video} width={1920} height={1080} fps={30} durationInFrames={Math.round(s.duration*30)} defaultProps={{index:i}} />)}</>);`;
+  writeFileSync(join(directory,'entry.jsx'),entry);
+  const serveUrl = await bundle({entryPoint:join(directory,'entry.jsx'),outDir:join(directory,'bundle'),publicDir:null,enableCaching:false,rootDir:join(modules,'..'),gitSource:null,webpackOverride:config=>({...config,resolve:{...config.resolve,modules:[modules,'node_modules']}})});
+  // Browser program cannot load media or communicate with external services.
+  const html = join(serveUrl,'index.html');
+  const csp = `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src 'none'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">`;
+  writeFileSync(html,readFileSync(html,'utf8').replace('<head>','<head>'+csp));
+  const browser = await openBrowser('chrome',{browserExecutable,logLevel:'error',chromiumOptions:{disableWebSecurity:false}});
+  // Pin each page to its own Remotion server. Block file URLs and navigations too.
+  const original = browser.newPage.bind(browser);
+  browser.newPage = async options => {
+    const page = await original(options), client = page._client();
+    let origin = '';
+    const goto = page.goto.bind(page);
+    page.goto = options => { origin = new URL(options.url).origin; return goto(options); };
+    await page.evaluateOnNewDocument(() => {
+      Object.defineProperty(window, 'open', {value:()=>null,writable:false,configurable:false});
+      Object.defineProperty(Window.prototype, 'open', {value:()=>null,writable:false,configurable:false});
+    });
+    await client.send('Fetch.enable',{patterns:[{urlPattern:'*'}]});
+    client.on('Fetch.requestPaused',event => {
+      const url=event.request.url;
+      const allowed=url.startsWith('data:')||url.startsWith('blob:')||origin && new URL(url).origin===origin;
+      void client.send(allowed?'Fetch.continueRequest':'Fetch.failRequest',allowed?{requestId:event.requestId}:{requestId:event.requestId,errorReason:'BlockedByClient'}).catch(()=>{});
+    });
+    return page;
+  };
+  try {
+    for (let i=0;i<scenes.length;i++) {
+      await renderMedia({serveUrl,composition:{id:'Scene'+i,width:1920,height:1080,fps:30,durationInFrames:Math.round(scenes[i].duration*30),defaultProps:{index:i},props:{index:i}},inputProps:{index:i},codec:'h264',crf:1,x264Preset:'ultrafast',pixelFormat:'yuv444p',imageFormat:'png',outputLocation:join(directory,`${i}-raw.mp4`),puppeteerInstance:browser,concurrency:1,muted:true,logLevel:'error',timeoutInMilliseconds:8000,envVariables:{},onDownload:()=>{throw Error('External media is disabled.');}});
+    }
+  } finally { await browser.close({silent:true}); }
+}
+main().catch(error=>{console.error('Remotion animation failed: '+error.message);process.exit(1);});

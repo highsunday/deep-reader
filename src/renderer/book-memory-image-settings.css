@@ -1,0 +1,43 @@
+.book-image-settings { container: book-image-settings / inline-size; margin-top: 26px; padding: 20px 0; border-block: 1px solid var(--line); color: #35434b; }
+.book-image-settings-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.book-image-settings-header h2 { margin: 0; color: #23465b; font: 700 20px/1.3 Georgia, "Times New Roman", serif; }
+.book-image-settings button { min-height: 36px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 8px; color: #59666d; background: var(--paper); cursor: pointer; font: inherit; font-size: 12px; font-weight: 650; }
+.book-image-settings button:hover { background: #f0f3f4; }
+.book-image-settings button:focus-visible, .book-image-settings select:focus-visible, .book-image-settings input:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+.book-image-settings button.book-image-settings-edit { min-height: 32px; padding: 5px 8px; border-color: transparent; color: var(--primary); background: transparent; }
+.book-image-settings button.book-image-settings-edit:hover { background: var(--primary-soft); }
+.book-image-settings button.primary-action { border-color: var(--primary); color: #fff; background: var(--primary); }
+.book-image-settings button.primary-action:hover { background: var(--primary-hover); }
+.book-image-settings button:disabled { cursor: default; opacity: .55; }
+.book-image-settings-summary { margin: 14px 0 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 20px; }
+.book-image-settings-summary dt { margin-bottom: 4px; color: #70797e; font-size: 11px; }
+.book-image-settings-summary dd { margin: 0; overflow-wrap: anywhere; font-size: 12px; line-height: 1.5; }
+.book-image-settings-sides { margin-top: 18px; display: grid; gap: 14px; }
+.book-image-settings-row { display: grid; grid-template-columns: 132px repeat(2, minmax(0, 1fr)); align-items: end; gap: 12px; }
+.book-image-settings-row h3 { align-self: center; margin: 16px 0 0; font-size: 12px; font-weight: 650; line-height: 1.5; }
+.book-image-settings-row label { min-width: 0; display: grid; gap: 5px; }
+.book-image-settings-row label > span { color: #70797e; font-size: 11px; }
+.book-image-settings-row select { width: 100%; min-width: 0; min-height: 38px; padding: 7px 8px; border: 1px solid #cccfcf; border-radius: 7px; background: var(--paper); color: #35434b; font: inherit; font-size: 13px; }
+.book-image-settings-workflow { min-width: 0; margin: 20px 0 14px; padding: 0; border: 0; }
+.book-image-settings-workflow legend { padding: 0; color: #70797e; font-size: 11px; }
+.book-image-settings-workflow > div { display: flex; flex-wrap: wrap; gap: 4px 20px; margin-top: 5px; }
+.book-image-settings-workflow label { min-height: 36px; display: flex; align-items: center; gap: 7px; cursor: pointer; font-size: 12px; }
+.book-image-settings-workflow input { margin: 0; accent-color: var(--primary); }
+.book-image-settings footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 12px 18px; }
+.book-image-settings-actions { display: flex; gap: 8px; }
+.book-image-settings-error { flex: 1 1 220px; margin: 0; color: #974d3c; font-size: 12px; line-height: 1.6; }
+.book-image-settings-notice { margin: 12px 0 0; color: #59666d; font-size: 12px; line-height: 1.5; }
+@container book-image-settings (max-width: 560px) {
+  .book-image-settings-summary { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .book-image-settings-summary > div { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 10px; }
+  .book-image-settings-summary dt { margin: 0; line-height: 1.6; }
+  .book-image-settings-row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px 12px; }
+  .book-image-settings-row h3 { grid-column: 1 / -1; margin: 0; }
+  .book-image-settings footer { flex-direction: column; align-items: stretch; gap: 10px; }
+  .book-image-settings-error { flex: none; }
+  .book-image-settings-actions { justify-content: flex-end; }
+}
+@container book-image-settings (max-width: 280px) {
+  .book-image-settings-row { grid-template-columns: minmax(0, 1fr); }
+  .book-image-settings-summary > div { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+}

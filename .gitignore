@@ -1,0 +1,19 @@
+node_modules
+.video-venv/
+.remotion/
+dist-electron/
+dist-renderer/
+.DS_Store
+release/
+
+# Local reading data and internal development evidence
+reports/
+documents/
+image-styles/
+.env
+.env.*
+!.env.example
+*.epub
+*.pem
+*.key
+*.bundle

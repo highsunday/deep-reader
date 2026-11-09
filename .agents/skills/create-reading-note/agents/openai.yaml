@@ -1,0 +1,4 @@
+interface:
+  display_name: "Create Reading Note"
+  short_description: "Prepare one bounded atomic reading-note draft."
+  default_prompt: "Use $create-reading-note to prepare one atomic note from the current reading segment."
